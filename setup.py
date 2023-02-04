@@ -10,7 +10,7 @@ _PATH_ROOT = os.path.dirname(__file__)
 _PATH_SOURCE = os.path.join(_PATH_ROOT, "src")
 
 
-def _load_py_module(fname, pkg="pl_sandbox"):
+def _load_py_module(fname, pkg="pl_hivemind"):
     spec = spec_from_file_location(os.path.join(pkg, fname), os.path.join(_PATH_SOURCE, pkg, fname))
     py = module_from_spec(spec)
     spec.loader.exec_module(py)
@@ -30,13 +30,13 @@ about = _load_py_module("__about__.py")
 # the goal of the project is simplicity for researchers, don't want to add too much
 # engineer specific practices
 setup(
-    name="lightning-sandbox",
+    name="PL-Hivemind",
     version=about.__version__,
     description=about.__docs__,
     author=about.__author__,
     author_email=about.__author_email__,
     url=about.__homepage__,
-    download_url="https://github.com/Lightning-AI/lightning-sandbox",
+    download_url="https://github.com/Lightning-Devel/PL-Hivemind",
     license=about.__license__,
     packages=find_packages(where="src"),
     package_dir={"": "src"},
@@ -49,9 +49,9 @@ setup(
     setup_requires=["wheel"],
     install_requires=_load_requirements(_PATH_ROOT),
     project_urls={
-        "Bug Tracker": "https://github.com/Lightning-AI/lightning-sandbox/issues",
-        "Documentation": "https://lightning-sandbox.rtfd.io/en/latest/",
-        "Source Code": "https://github.com/Lightning-AI/lightning-sandbox",
+        "Bug Tracker": "https://github.com/Lightning-Devel/PL-Hivemind/issues",
+        "Documentation": "https://PL-Hivemind.rtfd.io/en/latest/",
+        "Source Code": "https://github.com/Lightning-Devel/PL-Hivemind",
     },
     classifiers=[
         "Environment :: Console",

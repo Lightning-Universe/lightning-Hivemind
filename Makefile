@@ -10,7 +10,7 @@ test: clean
 	pip install -q -r tests/requirements.txt
 
 	# use this to run tests
-	python -m coverage run --source pl_sandbox -m pytest src tests -v --flake8
+	python -m coverage run --source pl_hivemind -m pytest src tests -v --flake8
 	python -m coverage report
 
 docs: clean
