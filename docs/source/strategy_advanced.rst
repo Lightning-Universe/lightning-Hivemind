@@ -1,7 +1,7 @@
 .. _hivemind_intermediate:
 
-Training on unreliable mixed GPUs across the internet (Intermediate)
-====================================================================
+Training on unreliable mixed GPUs across the internet (Advanced)
+================================================================
 
 Reducing Communication By Overlapping Communication
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -27,10 +27,10 @@ to overlap communication with computation.
 
     import torch
     from functools import partial
-    import pytorch_lightning as pl
+    from pytorch_lightning import Trainer
     from pl_hivemind.strategy import HivemindStrategy
 
-    trainer = pl.Trainer(
+    trainer = Trainer(
         strategy=HivemindStrategy(
             target_batch_size=8192,
             delay_state_averaging=True,
@@ -52,7 +52,7 @@ We can also offload the optimizer state to the CPU whilst re-using gradient buff
 Offloading Optimizer State to the CPU
 """""""""""""""""""""""""""""""""""""
 
-Offloading the Optimizer state to the CPU works the same as :ref:`deepspeed-zero-stage-2-offload`, where we save GPU memory by keeping all optimizer states on the CPU.
+Offloading the Optimizer state to the CPU works the same as Deepspeed Zero-stage-2-offload, where we save GPU memory by keeping all optimizer states on the CPU.
 
 .. note::
     Enabling these flags means that you must pass in a ``scheduler_fn`` to the ``HivemindStrategy`` instead of relying on a scheduler from ``configure_optimizers``.
@@ -64,10 +64,10 @@ Offloading the Optimizer state to the CPU works the same as :ref:`deepspeed-zero
 
     import torch
     from functools import partial
-    import pytorch_lightning as pl
+    from pytorch_lightning import Trainer
     from pl_hivemind.strategy import HivemindStrategy
 
-    trainer = pl.Trainer(
+    trainer = Trainer(
         strategy=HivemindStrategy(
             target_batch_size=8192,
             offload_optimizer=True,
@@ -89,9 +89,9 @@ By default, Hivemind accumulates gradients in a separate buffer. This means addi
 
 .. code-block:: python
 
-    import pytorch_lightning as pl
+    from pytorch_lightning import Trainer
     from pl_hivemind.strategy import HivemindStrategy
 
-    trainer = pl.Trainer(
+    trainer = Trainer(
         strategy=HivemindStrategy(target_batch_size=8192, reuse_grad_buffers=True), accelerator="gpu", devices=1
     )
