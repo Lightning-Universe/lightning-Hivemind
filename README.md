@@ -25,10 +25,10 @@ is made on all processes.
 When using `HivemindStrategy` note that you cannot use gradient accumulation (`accumulate_grad_batches`). This is because Hivemind manages accumulation internally.
 
 ```py
-import pytorch_lightning as pl
+from pytorch_lightning import Trainer
 from pl_hivemind.strategy import HivemindStrategy
 
-trainer = pl.Trainer(strategy=HivemindStrategy(target_batch_size=8192), accelerator="gpu", devices=1)
+trainer = Trainer(strategy=HivemindStrategy(target_batch_size=8192), accelerator="gpu", devices=1)
 ```
 
 Followed by:
