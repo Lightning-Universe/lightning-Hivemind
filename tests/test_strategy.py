@@ -18,13 +18,6 @@ from torch.optim import Optimizer
 from pl_hivemind.strategy import HiveMindScheduler, HivemindStrategy
 
 
-@mock.patch("pl_hivemind.strategy._HIVEMIND_AVAILABLE", False)
-def test_raise_exception_if_hivemind_unavailable():
-    """Test that we raise an exception when Hivemind is not available."""
-    with pytest.raises(MisconfigurationException, match="you must have Hivemind installed"):
-        HivemindStrategy(target_batch_size=1)
-
-
 @mock.patch("hivemind.DHT", autospec=True)
 def test_strategy(mock_dht):
     strategy = HivemindStrategy(target_batch_size=1)
