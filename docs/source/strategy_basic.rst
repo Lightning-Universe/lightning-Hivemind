@@ -1,5 +1,3 @@
-:orphan:
-
 .. _hivemind_basic:
 
 Training on unreliable mixed GPUs across the internet (Basic)

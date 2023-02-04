@@ -18,21 +18,16 @@ import os
 import platform
 from typing import Any, Callable, Dict, List, Optional, Union
 
-import pytorch_lightning as pl
+import hivemind
 import torch
 from lightning_fabric.utilities.types import LRScheduler, ReduceLROnPlateau
+from pytorch_lightning import Trainer
 from pytorch_lightning.strategies.strategy import Strategy, TBroadcast
 from pytorch_lightning.utilities.data import extract_batch_size
 from pytorch_lightning.utilities.exceptions import MisconfigurationException
-from pytorch_lightning.utilities.imports import _HIVEMIND_AVAILABLE
 from pytorch_lightning.utilities.model_helpers import is_overridden
 from pytorch_lightning.utilities.rank_zero import rank_zero_warn
 from torch import Tensor
-
-if _HIVEMIND_AVAILABLE:
-    import hivemind
-else:
-    hivemind = None
 
 log = logging.getLogger(__name__)
 
@@ -118,7 +113,7 @@ class HivemindStrategy(Strategy):
         initial_peers: Optional[Union[str, List]] = None,
         **optimizer_kwargs: Any,
     ):
-        if not _HIVEMIND_AVAILABLE or platform.system() != "Linux":
+        if platform.system() != "Linux":
             raise MisconfigurationException(
                 "To use the `HivemindStrategy`, you must have Hivemind installed and be running on Linux."
                 " Install it by running `pip install -U hivemind`."
@@ -200,7 +195,7 @@ class HivemindStrategy(Strategy):
     def is_global_zero(self) -> bool:
         return True
 
-    def setup(self, trainer: "pl.Trainer") -> None:
+    def setup(self, trainer: Trainer) -> None:
         self.model_to_device()
         super().setup(trainer)
         if self.precision_plugin.precision == "16":
@@ -263,10 +258,7 @@ class HivemindStrategy(Strategy):
                 raise ValueError(
                     f"The `ReduceLROnPlateau` scheduler is not currently supported with `{self.__class__.__name__}`."
                 )
-            scheduler_config.scheduler = HiveMindScheduler(
-                optimizer=opt,
-                scheduler=scheduler,
-            )
+            scheduler_config.scheduler = HiveMindScheduler(optimizer=opt, scheduler=scheduler)
 
     def on_train_batch_start(self, batch: Any, batch_idx: int, dataloader_idx: int = 0) -> None:
         if not self._hivemind_initialized:
@@ -277,12 +269,12 @@ class HivemindStrategy(Strategy):
                 try:
                     self._batch_size = extract_batch_size(batch)
                     log.info(f"Found per machine batch size automatically from the batch: {self._batch_size}")
-                except (MisconfigurationException, RecursionError) as e:
+                except (MisconfigurationException, RecursionError) as err:
                     raise MisconfigurationException(
                         "We tried to infer the batch size from the first batch of data. "
                         "Please provide the batch size to the Strategy by "
                         "``Trainer(strategy=HivemindStrategy(batch_size=x))``. "
-                    ) from e
+                    ) from err
             self._initialize_hivemind()
 
     def reduce(self, tensor: Union[Any, Tensor], *args: Any, **kwargs: Any) -> Union[Any, Tensor]:

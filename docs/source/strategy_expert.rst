@@ -1,5 +1,3 @@
-:orphan:
-
 .. _hivemind_expert:
 
 Training on unreliable mixed GPUs across the internet (Expert)
