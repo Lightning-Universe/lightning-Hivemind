@@ -11,8 +11,7 @@ PL-Hivemind documentation
    :caption: Start here
 
    readme
-   strategy_basic
-   strategy_intermediate
+   strategy_advanced
    strategy_expert
 
 
