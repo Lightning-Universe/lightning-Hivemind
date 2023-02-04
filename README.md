@@ -1,21 +1,45 @@
-# Lightning Sample project/package
-
-This is starter project template which shall simplify initial steps for each new PL project...
+# Lightning extension: Hivemind
 
 [![CI testing](https://github.com/Lightning-Devel/PL-Hivemind/actions/workflows/ci-testing.yml/badge.svg?event=push)](https://github.com/Lightning-Devel/PL-Hivemind/actions/workflows/ci-testing.yml)
 [![General checks](https://github.com/Lightning-Devel/PL-Hivemind/actions/workflows/ci-checks.yml/badge.svg?event=push)](https://github.com/Lightning-Devel/PL-Hivemind/actions/workflows/ci-checks.yml)
 [![Documentation Status](https://readthedocs.org/projects/PL-Hivemind/badge/?version=latest)](https://PL-Hivemind.readthedocs.io/en/latest/?badge=latest)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/Lightning-Devel/PL-Hivemind/main.svg?badge_token=mqheL1-cTn-280Vx4cJUdg)](https://results.pre-commit.ci/latest/github/Lightning-Devel/PL-Hivemind/main?badge_token=mqheL1-cTn-280Vx4cJUdg)
 
-\* the Read-The-Docs is failing as this one leads to the public domain which requires the repo to be public too
+Collaborative Training tries to solve the need for top-tier multi-GPU servers by allowing you to train across unreliable machines,
+such as local machines or even preemptible cloud compute across the internet.
 
-## To be Done aka cross-check
+Under the hood, we use [Hivemind](https://github.com/learning-at-home/hivemind) which provides de-centralized training across the internet.
 
-You still need to enable some external integrations such as:
+To use Collaborative Training, you need to first this extension.
 
-- [ ] lock the main breach in GH setting - no direct push without PR
-- [ ] init Read-The-Docs (add this new project)
-- [ ] add credentials for releasing package to PyPI
+```bash
+pip install .
+```
+
+The `HivemindStrategy` accumulates gradients from all processes that are collaborating until they reach a `target_batch_size`. By default, we use the batch size
+of the first batch to determine what each local machine batch contributes towards the `target_batch_size`. Once the `target_batch_size` is reached, an optimizer step
+is made on all processes.
+
+When using `HivemindStrategy` note that you cannot use gradient accumulation (`accumulate_grad_batches`). This is because Hivemind manages accumulation internally.
+
+```py
+import pytorch_lightning as pl
+from pl_hivemind.strategy import HivemindStrategy
+
+trainer = pl.Trainer(strategy=HivemindStrategy(target_batch_size=8192), accelerator="gpu", devices=1)
+```
+
+Followed by:
+
+```bash
+python train.py
+# Other machines can connect running the same command:
+# INITIAL_PEERS=... python train.py
+# or passing the peers to the strategy:"
+# HivemindStrategy(initial_peers=...)"
+```
+
+A helper message is printed once your training begins, which shows you how to start training on other machines using the same code.
 
 ## Tests / Docs notes
 

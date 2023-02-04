@@ -28,7 +28,7 @@ to overlap communication with computation.
     import torch
     from functools import partial
     import pytorch_lightning as pl
-    from pytorch_lightning.strategies import HivemindStrategy
+    from pl_hivemind.strategy import HivemindStrategy
 
     trainer = pl.Trainer(
         strategy=HivemindStrategy(
@@ -65,7 +65,7 @@ Offloading the Optimizer state to the CPU works the same as :ref:`deepspeed-zero
     import torch
     from functools import partial
     import pytorch_lightning as pl
-    from pytorch_lightning.strategies import HivemindStrategy
+    from pl_hivemind.strategy import HivemindStrategy
 
     trainer = pl.Trainer(
         strategy=HivemindStrategy(
@@ -90,7 +90,7 @@ By default, Hivemind accumulates gradients in a separate buffer. This means addi
 .. code-block:: python
 
     import pytorch_lightning as pl
-    from pytorch_lightning.strategies import HivemindStrategy
+    from pl_hivemind.strategy import HivemindStrategy
 
     trainer = pl.Trainer(
         strategy=HivemindStrategy(target_batch_size=8192, reuse_grad_buffers=True), accelerator="gpu", devices=1

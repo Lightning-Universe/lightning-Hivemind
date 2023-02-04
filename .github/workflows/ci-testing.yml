@@ -17,7 +17,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macOS-latest, windows-latest]
+        os: [ubuntu-latest, macOS-latest]
         python-version: [3.9]
         requires: ['oldest', 'latest']
 
@@ -57,6 +57,8 @@ jobs:
         pip list
 
     - name: Tests
+      env:
+        PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION: "python"
       run: coverage run --source pl_hivemind -m pytest src tests -v
 
     - name: Statistics
