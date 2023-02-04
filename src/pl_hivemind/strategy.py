@@ -18,10 +18,8 @@ import os
 import platform
 from typing import Any, Callable, Dict, List, Optional, Union
 
-import torch
-from torch import Tensor
-
 import pytorch_lightning as pl
+import torch
 from lightning_fabric.utilities.types import LRScheduler, ReduceLROnPlateau
 from pytorch_lightning.strategies.strategy import Strategy, TBroadcast
 from pytorch_lightning.utilities.data import extract_batch_size
@@ -29,6 +27,7 @@ from pytorch_lightning.utilities.exceptions import MisconfigurationException
 from pytorch_lightning.utilities.imports import _HIVEMIND_AVAILABLE
 from pytorch_lightning.utilities.model_helpers import is_overridden
 from pytorch_lightning.utilities.rank_zero import rank_zero_warn
+from torch import Tensor
 
 if _HIVEMIND_AVAILABLE:
     import hivemind
@@ -39,6 +38,65 @@ log = logging.getLogger(__name__)
 
 
 class HivemindStrategy(Strategy):
+    """Provides capabilities to train with Hivemind, collaboratively across the internet with unreliable machines.
+
+    .. warning:: ``HivemindStrategy`` is experimental and subject to change.
+
+    Arguments:
+        target_batch_size: When training, the batch size to accumulate to before running a step. The larger this
+            batch size, the more work can be done asynchronously without communication.
+
+        run_id: A unique identifier of this training run, used as a common prefix for all DHT keys.
+            See ``https://learning-at-home.readthedocs.io/en/latest/user/dht.html``.
+
+        batch_size: The local batch size per process. If not provided, we infer this from the first batch of data
+            passed in at training (lazy). Note that this should not change throughout training.
+
+        delay_state_averaging: If enabled (default), average parameters and extra tensors in a background thread;
+            if set to False, average parameters synchronously within the
+            corresponding :meth:`hivemind.Optimizer.step` call.
+
+        delay_optimizer_step: Run optimizer in background, apply results in future .step. requires
+            :paramref:`~pl_hivemind.strategy.HivemindStrategy.offload_optimizer`.
+
+        delay_grad_averaging: Average gradients in background; requires
+            :paramref:`~pl_hivemind.strategy.HivemindStrategy.offload_optimizer` and
+            :paramref:`~pl_hivemind.strategy.HivemindStrategy.delay_optimizer_step`.
+
+        offload_optimizer: Offload the optimizer to host memory, saving GPU memory for parameters and gradients.
+
+        reuse_grad_buffers: Use the model's gradient buffers (params.grad) for gradient accumulation
+            which is more memory efficient. Lightning will automatically disable ``zero_grad``
+            in the ``LightningModule``.
+
+        scheduler_fn: callable(optimizer) -> PyTorch LRScheduler or a pre-initialized PyTorch scheduler.
+            When using `offload_optimizer`/`delay_optimizer_step`/`delay_state_averaging` ``scheduler_fn``
+            is required to be passed to the ``HivemindStrategy``. This is because the optimizer
+            is re-created and the scheduler needs to be re-created as well.
+
+        matchmaking_time: When looking for group, wait for peers to join for up to this many seconds.
+            Increase if you see "averaged gradients with N peers" where N is below 0.9x on >=25% of epochs.
+            Training with low-latency network, decreasing matchmaking_time allows training with smaller batch sizes.
+
+        averaging_timeout: If an averaging step hangs for this long, it will be cancelled automatically.
+            Increase averaging_timeout if you see "Proceeding with local gradients" at least 25% of the time.
+            Do not set this timeout too high, as it may cause your optimizer to hang
+            after some types of network errors.
+
+        verbose: Report internal Hivemind events such as accumulating gradients and running background tasks.
+
+        averager_opts: Additional keyword arguments forwarded to both
+            ``GradientAverager`` and ``TrainingStateAverager``.
+
+        host_maddrs: List of multi-addrs to create visible peers for other processes.
+            `https://learning-at-home.readthedocs.io/en/latest/user/dht.html#running-across-the-internet`
+
+        initial_peers: If connecting to a running process, a list of initial peers needs to be passed in.
+            This can also be set via the env variable ``INITIAL_PEERS``.
+
+        **optimizer_kwargs: kwargs are passed to the :class:`hivemind.Optimizer` class.
+    """
+
     INITIAL_PEERS_ENV: str = "PL_INITIAL_PEERS"
 
     def __init__(
@@ -60,67 +118,6 @@ class HivemindStrategy(Strategy):
         initial_peers: Optional[Union[str, List]] = None,
         **optimizer_kwargs: Any,
     ):
-        """Provides capabilities to train using the Hivemind Library, training collaboratively across the internet
-        with unreliable machines. For more information, `refer to the docs <https://pytorch-
-        lightning.readthedocs.io/en/latest/strategies/hivemind.html>`__.
-
-        .. warning:: ``HivemindStrategy`` is experimental and subject to change.
-
-        Arguments:
-
-            target_batch_size: When training, the batch size to accumulate to before running a step. The larger this
-                batch size, the more work can be done asynchronously without communication.
-
-            run_id: A unique identifier of this training run, used as a common prefix for all DHT keys.
-                See ``https://learning-at-home.readthedocs.io/en/latest/user/dht.html``.
-
-            batch_size: The local batch size per process. If not provided, we infer this from the first batch of data
-                passed in at training (lazy). Note that this should not change throughout training.
-
-            delay_state_averaging: If enabled (default), average parameters and extra tensors in a background thread;
-                if set to False, average parameters synchronously within the
-                corresponding :meth:`hivemind.Optimizer.step` call.
-
-            delay_optimizer_step: Run optimizer in background, apply results in future .step. requires
-                :paramref:`~pytorch_lightning.strategies.hivemind.HivemindStrategy.offload_optimizer`.
-
-            delay_grad_averaging: Average gradients in background; requires
-                :paramref:`~pytorch_lightning.strategies.hivemind.HivemindStrategy.offload_optimizer` and
-                :paramref:`~pytorch_lightning.strategies.hivemind.HivemindStrategy.delay_optimizer_step`.
-
-            offload_optimizer: Offload the optimizer to host memory, saving GPU memory for parameters and gradients.
-
-            reuse_grad_buffers: Use the model's gradient buffers (params.grad) for gradient accumulation
-                which is more memory efficient. Lightning will automatically disable ``zero_grad``
-                in the ``LightningModule``.
-
-            scheduler_fn: callable(optimizer) -> PyTorch LRScheduler or a pre-initialized PyTorch scheduler.
-                When using `offload_optimizer`/`delay_optimizer_step`/`delay_state_averaging` ``scheduler_fn``
-                is required to be passed to the ``HivemindStrategy``. This is because the optimizer
-                is re-created and the scheduler needs to be re-created as well.
-
-            matchmaking_time: When looking for group, wait for peers to join for up to this many seconds.
-                Increase if you see "averaged gradients with N peers" where N is below 0.9x on >=25% of epochs.
-                Training with low-latency network, decreasing matchmaking_time allows training with smaller batch sizes.
-
-            averaging_timeout: If an averaging step hangs for this long, it will be cancelled automatically.
-                Increase averaging_timeout if you see "Proceeding with local gradients" at least 25% of the time.
-                Do not set this timeout too high, as it may cause your optimizer to hang
-                after some types of network errors.
-
-            verbose: Report internal Hivemind events such as accumulating gradients and running background tasks.
-
-            averager_opts: Additional keyword arguments forwarded to both
-                ``GradientAverager`` and ``TrainingStateAverager``.
-
-            host_maddrs: List of multi-addrs to create visible peers for other processes.
-                `https://learning-at-home.readthedocs.io/en/latest/user/dht.html#running-across-the-internet`
-
-            initial_peers: If connecting to a running process, a list of initial peers needs to be passed in.
-                This can also be set via the env variable ``INITIAL_PEERS``.
-
-            **optimizer_kwargs: kwargs are passed to the :class:`hivemind.Optimizer` class.
-        """
         if not _HIVEMIND_AVAILABLE or platform.system() != "Linux":
             raise MisconfigurationException(
                 "To use the `HivemindStrategy`, you must have Hivemind installed and be running on Linux."
@@ -144,7 +141,7 @@ class HivemindStrategy(Strategy):
             delay_state_averaging=delay_state_averaging,
             delay_grad_averaging=delay_grad_averaging,
             offload_optimizer=offload_optimizer,
-            averager_opts=averager_opts if averaging_timeout is not None else dict(request_timeout=1.0),
+            averager_opts=averager_opts if averaging_timeout is not None else {"request_timeout": 1.0},
             verbose=verbose,
             reuse_grad_buffers=reuse_grad_buffers,
             **optimizer_kwargs,
@@ -189,7 +186,7 @@ class HivemindStrategy(Strategy):
 
         if isinstance(self.accelerator, CUDAAccelerator):
             return torch.device(f"cuda:{torch.cuda.current_device()}")
-        elif isinstance(self.accelerator, CPUAccelerator):
+        if isinstance(self.accelerator, CPUAccelerator):
             return torch.device("cpu")
         raise MisconfigurationException(
             f"Was unable to infer device type from the accelerator: {self.accelerator.__class__.__name__}."
@@ -305,7 +302,6 @@ class HivemindStrategy(Strategy):
         return obj
 
     def teardown(self) -> None:
-
         if self._optimizer_zero_grad_original is not None and self.lightning_module is not None:
             # re-enable `optimizer_zero_grad`
             self.lightning_module.optimizer_zero_grad = self._optimizer_zero_grad_original  # type: ignore[assignment]
