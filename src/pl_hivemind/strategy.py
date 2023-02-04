@@ -20,15 +20,15 @@ from typing import Any, Callable, Dict, List, Optional, Union
 
 import hivemind
 import torch
+from lightning_fabric.strategies.strategy import TBroadcast
 from lightning_fabric.utilities.types import LRScheduler, ReduceLROnPlateau
 from pytorch_lightning import Trainer
+from pytorch_lightning.strategies import Strategy
 from pytorch_lightning.utilities.data import extract_batch_size
 from pytorch_lightning.utilities.exceptions import MisconfigurationException
 from pytorch_lightning.utilities.model_helpers import is_overridden
 from pytorch_lightning.utilities.rank_zero import rank_zero_warn
 from torch import Tensor
-
-from pl_hivemind.strategy.strategy import Strategy, TBroadcast
 
 log = logging.getLogger(__name__)
 
