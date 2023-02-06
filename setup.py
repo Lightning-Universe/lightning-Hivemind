@@ -42,7 +42,7 @@ setup(
     author=about.__author__,
     author_email=about.__author_email__,
     url=about.__homepage__,
-    download_url="https://github.com/Lightning-Devel/PL-Hivemind",
+    download_url="https://github.com/Lightning-Sandbox/PL-Hivemind",
     license=about.__license__,
     packages=find_packages(where="src"),
     package_dir={"": "src"},
@@ -55,9 +55,9 @@ setup(
     setup_requires=["wheel"],
     install_requires=_load_requirements(_PATH_ROOT),
     project_urls={
-        "Bug Tracker": "https://github.com/Lightning-Devel/PL-Hivemind/issues",
+        "Bug Tracker": "https://github.com/Lightning-Sandbox/PL-Hivemind/issues",
         "Documentation": "https://PL-Hivemind.rtfd.io/en/latest/",
-        "Source Code": "https://github.com/Lightning-Devel/PL-Hivemind",
+        "Source Code": "https://github.com/Lightning-Sandbox/PL-Hivemind",
     },
     classifiers=[
         "Environment :: Console",

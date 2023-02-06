@@ -3,7 +3,7 @@ __author__ = "Lightning-AI et al."
 __author_email__ = "name@lightning.ai"
 __license__ = "Apache-2.0"
 __copyright__ = f"Copyright (c) 2021-2023, {__author__}."
-__homepage__ = "https://github.com/Lightning-Devel/PL-Hivemind"
+__homepage__ = "https://github.com/Lightning-Sandbox/PL-Hivemind"
 __docs__ = "Lightning strategy extension for Hivemind."
 
 __all__ = [

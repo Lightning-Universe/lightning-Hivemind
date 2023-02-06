@@ -47,7 +47,7 @@ release = about.__version__
 
 # Options for the linkcode extension
 # ----------------------------------
-github_user = "Lightning-Devel"
+github_user = "Lightning-Sandbox"
 github_repo = project
 
 # -- Project documents -------------------------------------------------------
