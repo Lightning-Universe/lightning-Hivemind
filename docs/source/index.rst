@@ -11,6 +11,8 @@ PL-Hivemind documentation
    :caption: Start here
 
    readme
+   strategy_advanced
+   strategy_expert
 
 
 Indices and tables

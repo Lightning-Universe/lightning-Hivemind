@@ -8,6 +8,7 @@ from setuptools import find_packages, setup
 
 _PATH_ROOT = os.path.dirname(__file__)
 _PATH_SOURCE = os.path.join(_PATH_ROOT, "src")
+_PATH_README = os.path.join(_PATH_ROOT, "README.md")
 
 
 def _load_py_module(fname, pkg="pl_hivemind"):
@@ -20,6 +21,11 @@ def _load_py_module(fname, pkg="pl_hivemind"):
 def _load_requirements(path_dir: str, file_name: str = "requirements.txt") -> list:
     reqs = parse_requirements(open(os.path.join(path_dir, file_name)).readlines())
     return list(map(str, reqs))
+
+
+def _load_readme(path_readme: str = _PATH_README) -> str:
+    with open(path_readme) as fp:
+        return fp.read()
 
 
 about = _load_py_module("__about__.py")
@@ -40,7 +46,7 @@ setup(
     license=about.__license__,
     packages=find_packages(where="src"),
     package_dir={"": "src"},
-    long_description=about.__long_doc__,
+    long_description=_load_readme(),
     long_description_content_type="text/markdown",
     include_package_data=True,
     zip_safe=False,
