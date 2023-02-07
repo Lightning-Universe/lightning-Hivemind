@@ -1,9 +1,9 @@
 # Lightning extension: Hivemind
 
-[![CI testing](https://github.com/Lightning-Sandbox/PL-Hivemind/actions/workflows/ci-testing.yml/badge.svg?event=push)](https://github.com/Lightning-Sandbox/PL-Hivemind/actions/workflows/ci-testing.yml)
-[![General checks](https://github.com/Lightning-Sandbox/PL-Hivemind/actions/workflows/ci-checks.yml/badge.svg?event=push)](https://github.com/Lightning-Sandbox/PL-Hivemind/actions/workflows/ci-checks.yml)
-[![Documentation Status](https://readthedocs.org/projects/PL-Hivemind/badge/?version=latest)](https://PL-Hivemind.readthedocs.io/en/latest/?badge=latest)
-[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/Lightning-Sandbox/PL-Hivemind/main.svg)](https://results.pre-commit.ci/latest/github/Lightning-Sandbox/PL-Hivemind/main)
+[![CI testing](https://github.com/Lightning-AI/lightning-Hivemind/actions/workflows/ci-testing.yml/badge.svg?event=push)](https://github.com/Lightning-AI/lightning-Hivemind/actions/workflows/ci-testing.yml)
+[![General checks](https://github.com/Lightning-AI/lightning-Hivemind/actions/workflows/ci-checks.yml/badge.svg?event=push)](https://github.com/Lightning-AI/lightning-Hivemind/actions/workflows/ci-checks.yml)
+[![Documentation Status](https://readthedocs.org/projects/lightning-Hivemind/badge/?version=latest)](https://lightning-Hivemind.readthedocs.io/en/latest/?badge=latest)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/Lightning-AI/lightning-Hivemind/main.svg)](https://results.pre-commit.ci/latest/github/Lightning-AI/lightning-Hivemind/main)
 
 Collaborative Training tries to solve the need for top-tier multi-GPU servers by allowing you to train across unreliable machines,
 such as local machines or even preemptible cloud compute across the internet.
@@ -13,8 +13,8 @@ Under the hood, we use [Hivemind](https://github.com/learning-at-home/hivemind) 
 To use Collaborative Training, you need to first this extension.
 
 ```bash
-git clone https://github.com/Lightning-Sandbox/PL-Hivemind.git
-cd PL-Hivemind
+git clone https://github.com/Lightning-AI/lightning-Hivemind.git
+cd lightning-Hivemind
 pip install .
 ```
 

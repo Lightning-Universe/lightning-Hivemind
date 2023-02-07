@@ -36,7 +36,7 @@ spec.loader.exec_module(about)
 # -- Project information -----------------------------------------------------
 
 # this name shall match the project name in Github as it is used for linking to code
-project = "PL-Hivemind"
+project = "lightning-Hivemind"
 copyright = about.__copyright__
 author = about.__author__
 
@@ -47,7 +47,7 @@ release = about.__version__
 
 # Options for the linkcode extension
 # ----------------------------------
-github_user = "Lightning-Sandbox"
+github_user = "Lightning-AI"
 github_repo = project
 
 # -- Project documents -------------------------------------------------------

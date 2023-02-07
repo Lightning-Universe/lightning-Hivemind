@@ -36,13 +36,13 @@ about = _load_py_module("__about__.py")
 # the goal of the project is simplicity for researchers, don't want to add too much
 # engineer specific practices
 setup(
-    name="PL-Hivemind",
+    name="lightning-Hivemind",
     version=about.__version__,
     description=about.__docs__,
     author=about.__author__,
     author_email=about.__author_email__,
     url=about.__homepage__,
-    download_url="https://github.com/Lightning-Sandbox/PL-Hivemind",
+    download_url="https://github.com/Lightning-AI/lightning-Hivemind",
     license=about.__license__,
     packages=find_packages(where="src"),
     package_dir={"": "src"},
@@ -55,9 +55,9 @@ setup(
     setup_requires=["wheel"],
     install_requires=_load_requirements(_PATH_ROOT),
     project_urls={
-        "Bug Tracker": "https://github.com/Lightning-Sandbox/PL-Hivemind/issues",
-        "Documentation": "https://PL-Hivemind.rtfd.io/en/latest/",
-        "Source Code": "https://github.com/Lightning-Sandbox/PL-Hivemind",
+        "Bug Tracker": "https://github.com/Lightning-AI/lightning-Hivemind/issues",
+        "Documentation": "https://lightning-Hivemind.rtfd.io/en/latest/",
+        "Source Code": "https://github.com/Lightning-AI/lightning-Hivemind",
     },
     classifiers=[
         "Environment :: Console",
