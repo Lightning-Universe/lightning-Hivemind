@@ -15,7 +15,7 @@ from pytorch_lightning.utilities.types import STEP_OUTPUT
 from torch import Tensor
 from torch.optim import Optimizer
 
-from pl_hivemind.strategy import HiveMindScheduler, HivemindStrategy
+from lightning_hivemind.strategy import HiveMindScheduler, HivemindStrategy
 
 
 @mock.patch("hivemind.DHT", autospec=True)
@@ -139,7 +139,7 @@ def test_warn_if_argument_passed(delay_grad_averaging, delay_state_averaging, de
 
 
 @mock.patch.dict(os.environ, {"HIVEMIND_MEMORY_SHARING_STRATEGY": "file_descriptor"}, clear=True)
-@mock.patch("pl_hivemind.strategy.HivemindStrategy.num_peers", new_callable=PropertyMock)
+@mock.patch("lightning_hivemind.strategy.HivemindStrategy.num_peers", new_callable=PropertyMock)
 def test_args_passed_to_optimizer(mock_peers):
     """Test to ensure arguments are correctly passed to the hivemind optimizer wrapper."""
     mock_peers.return_value = 1

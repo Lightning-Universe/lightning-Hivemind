@@ -46,7 +46,7 @@ exclude = "(.eggs|.git|.hg|.mypy_cache|.venv|_build|buck-out|build|dist)"
 
 [tool.isort]
 known_first_party = [
-    "pl_hivemind",
+    "lightning_hivemind",
     "integrations",
     "unittests",
     "integrations",

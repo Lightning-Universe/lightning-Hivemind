@@ -53,11 +53,11 @@ class HivemindStrategy(Strategy):
             corresponding :meth:`hivemind.Optimizer.step` call.
 
         delay_optimizer_step: Run optimizer in background, apply results in future .step. requires
-            :paramref:`~pl_hivemind.strategy.HivemindStrategy.offload_optimizer`.
+            :paramref:`~lightning_hivemind.strategy.HivemindStrategy.offload_optimizer`.
 
         delay_grad_averaging: Average gradients in background; requires
-            :paramref:`~pl_hivemind.strategy.HivemindStrategy.offload_optimizer` and
-            :paramref:`~pl_hivemind.strategy.HivemindStrategy.delay_optimizer_step`.
+            :paramref:`~lightning_hivemind.strategy.HivemindStrategy.offload_optimizer` and
+            :paramref:`~lightning_hivemind.strategy.HivemindStrategy.delay_optimizer_step`.
 
         offload_optimizer: Offload the optimizer to host memory, saving GPU memory for parameters and gradients.
 

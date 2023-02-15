@@ -26,7 +26,7 @@ When using `HivemindStrategy` note that you cannot use gradient accumulation (`a
 
 ```py
 from pytorch_lightning import Trainer
-from pl_hivemind.strategy import HivemindStrategy
+from lightning_hivemind.strategy import HivemindStrategy
 
 trainer = Trainer(strategy=HivemindStrategy(target_batch_size=8192), accelerator="gpu", devices=1)
 ```

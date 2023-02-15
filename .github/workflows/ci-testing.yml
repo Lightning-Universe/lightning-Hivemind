@@ -60,7 +60,7 @@ jobs:
     - name: Tests
       env:
         PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION: "python"
-      run: coverage run --source pl_hivemind -m pytest src tests -v
+      run: coverage run --source lightning_hivemind -m pytest src tests -v
 
     - name: Statistics
       if: success()

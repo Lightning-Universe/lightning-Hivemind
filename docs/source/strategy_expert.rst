@@ -22,7 +22,7 @@ Below, we enable Float16 compression, which compresses gradients and states to F
 
     from hivemind import Float16Compression
     from pytorch_lightning import Trainer
-    from pl_hivemind.strategy import HivemindStrategy
+    from lightning_hivemind.strategy import HivemindStrategy
 
     trainer = Trainer(
         strategy=HivemindStrategy(
@@ -42,7 +42,7 @@ Size Adaptive Compression has been used in a variety of Hivemind applications an
 
     from hivemind import Float16Compression, Uniform8BitQuantization
     from pytorch_lightning import Trainer
-    from pl_hivemind.strategy import HivemindStrategy
+    from lightning_hivemind.strategy import HivemindStrategy
 
     # compresses values above threshold with 8bit Quantization, lower with Float16
     compression = SizeAdaptiveCompression(
@@ -71,7 +71,7 @@ In short, PowerSGD uses a low-rank approximation to compress gradients before ru
 .. code-block:: python
 
     from pytorch_lightning import Trainer
-    from pl_hivemind.strategy import HivemindStrategy
+    from lightning_hivemind.strategy import HivemindStrategy
     from functools import partial
     from hivemind.optim.power_sgd_averager import PowerSGDGradientAverager
 
