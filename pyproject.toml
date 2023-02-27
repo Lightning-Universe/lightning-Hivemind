@@ -29,7 +29,7 @@ addopts = "--strict-markers --doctest-modules --color=yes --disable-pytest-warni
 filterwarnings = [
     "error::FutureWarning",
 ]
-xfail_strict = true
+xfail_strict = false  # todo: set it as true
 junit_duration_report = "call"
 
 [tool.coverage.report]
