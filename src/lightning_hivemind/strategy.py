@@ -24,6 +24,7 @@ from lightning_fabric.strategies.strategy import TBroadcast
 from lightning_fabric.utilities.types import LRScheduler, ReduceLROnPlateau
 from lightning_utilities import module_available
 from torch import Tensor
+from torch.optim import Optimizer
 
 if module_available("lightning"):
     from lightning.pytorch import Trainer
@@ -106,6 +107,7 @@ class HivemindStrategy(Strategy):
     """
 
     INITIAL_PEERS_ENV: str = "PL_INITIAL_PEERS"
+    optimizers: List[Optimizer]
 
     def __init__(
         self,
@@ -261,7 +263,7 @@ class HivemindStrategy(Strategy):
                 " as this would delete the gradients before they are averaged."
             )
         assert lightning_module is not None
-        lightning_module.optimizer_zero_grad = None  # type: ignore[assignment]
+        lightning_module.optimizer_zero_grad = None
 
     def _wrap_schedulers(self, opt: "hivemind.Optimizer") -> None:
         # wrap schedulers so that they only update when the hivemind optimizer updates
@@ -309,7 +311,7 @@ class HivemindStrategy(Strategy):
     def teardown(self) -> None:
         if self._optimizer_zero_grad_original is not None and self.lightning_module is not None:
             # re-enable `optimizer_zero_grad`
-            self.lightning_module.optimizer_zero_grad = self._optimizer_zero_grad_original  # type: ignore[assignment]
+            self.lightning_module.optimizer_zero_grad = self._optimizer_zero_grad_original
 
         if self._opt:
             self._opt.shutdown()
