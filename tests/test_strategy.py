@@ -8,12 +8,26 @@ from unittest.mock import PropertyMock
 import hivemind
 import pytest
 import torch
-from pytorch_lightning import Trainer
-from pytorch_lightning.demos.boring_classes import BoringModel
-from pytorch_lightning.utilities.exceptions import MisconfigurationException
-from pytorch_lightning.utilities.types import STEP_OUTPUT
+from lightning_utilities import module_available
 from torch import Tensor
 from torch.optim import Optimizer
+
+if module_available("lightning"):
+    from lightning.pytorch import Trainer
+    from lightning.pytorch.demos.boring_classes import BoringModel
+    from lightning.pytorch.utilities.exceptions import MisconfigurationException
+    from lightning.pytorch.utilities.types import STEP_OUTPUT
+
+    PL_PACKAGE = "lightning.pytorch"
+elif module_available("pytorch_lightning"):
+    from pytorch_lightning import Trainer
+    from pytorch_lightning.demos.boring_classes import BoringModel
+    from pytorch_lightning.utilities.exceptions import MisconfigurationException
+    from pytorch_lightning.utilities.types import STEP_OUTPUT
+
+    PL_PACKAGE = "pytorch_lightning"
+else:
+    raise ModuleNotFoundError("You are missing `lightning` or `pytorch-lightning` package, please install it.")
 
 from lightning_hivemind.strategy import HiveMindScheduler, HivemindStrategy
 
@@ -90,6 +104,9 @@ def test_reuse_grad_buffers_warning():
         trainer.fit(model)
 
 
+@pytest.mark.xfail(
+    raises=RuntimeError, reason="Training with multiple optimizers is only supported with manual optimization"
+)
 def test_raise_exception_multiple_optimizers():
     """Test that we raise an exception when multiple optimizers are provided."""
 
@@ -106,8 +123,8 @@ def test_raise_exception_multiple_optimizers():
         trainer.fit(model)
 
 
-@mock.patch("pytorch_lightning.utilities.data._extract_batch_size", autospec=True, return_value=[None])
-def test_raise_exception_no_batch_size(mock_extract_batch_size):
+@mock.patch(f"{PL_PACKAGE}.utilities.data._extract_batch_size", autospec=True, return_value=[None])
+def test_raise_exception_no_batch_size(mock__extract_batch_size):
     """Test that we raise an exception when no batch size is automatically found."""
     model = BoringModel()
     trainer = Trainer(strategy=HivemindStrategy(target_batch_size=1), fast_dev_run=True)

@@ -20,15 +20,30 @@ from typing import Any, Callable, Dict, List, Optional, Union
 
 import hivemind
 import torch
-from lightning_fabric.strategies.strategy import TBroadcast
-from lightning_fabric.utilities.types import LRScheduler, ReduceLROnPlateau
-from pytorch_lightning import Trainer
-from pytorch_lightning.strategies import Strategy
-from pytorch_lightning.utilities.data import extract_batch_size
-from pytorch_lightning.utilities.exceptions import MisconfigurationException
-from pytorch_lightning.utilities.model_helpers import is_overridden
-from pytorch_lightning.utilities.rank_zero import rank_zero_warn
+from lightning_utilities import module_available
 from torch import Tensor
+from torch.optim import Optimizer
+
+if module_available("lightning"):
+    from lightning.fabric.strategies.strategy import TBroadcast
+    from lightning.fabric.utilities.types import LRScheduler, ReduceLROnPlateau
+    from lightning.pytorch import Trainer
+    from lightning.pytorch.strategies import Strategy
+    from lightning.pytorch.utilities.data import extract_batch_size
+    from lightning.pytorch.utilities.exceptions import MisconfigurationException
+    from lightning.pytorch.utilities.model_helpers import is_overridden
+    from lightning.pytorch.utilities.rank_zero import rank_zero_warn
+elif module_available("pytorch_lightning") and module_available("lightning_fabric"):
+    from lightning_fabric.strategies.strategy import TBroadcast
+    from lightning_fabric.utilities.types import LRScheduler, ReduceLROnPlateau
+    from pytorch_lightning import Trainer
+    from pytorch_lightning.strategies import Strategy
+    from pytorch_lightning.utilities.data import extract_batch_size
+    from pytorch_lightning.utilities.exceptions import MisconfigurationException
+    from pytorch_lightning.utilities.model_helpers import is_overridden
+    from pytorch_lightning.utilities.rank_zero import rank_zero_warn
+else:
+    raise ModuleNotFoundError("You are missing `lightning` or `pytorch-lightning` package, please install it.")
 
 log = logging.getLogger(__name__)
 
@@ -94,6 +109,7 @@ class HivemindStrategy(Strategy):
     """
 
     INITIAL_PEERS_ENV: str = "PL_INITIAL_PEERS"
+    optimizers: List[Optimizer]
 
     def __init__(
         self,
@@ -177,15 +193,17 @@ class HivemindStrategy(Strategy):
 
     @property
     def root_device(self) -> torch.device:
-        from pytorch_lightning.accelerators.cpu import CPUAccelerator
-        from pytorch_lightning.accelerators.cuda import CUDAAccelerator
+        if module_available("lightning"):
+            from lightning.pytorch.accelerators import CPUAccelerator, CUDAAccelerator
+        else:
+            from pytorch_lightning.accelerators import CPUAccelerator, CUDAAccelerator
 
         if isinstance(self.accelerator, CUDAAccelerator):
             return torch.device(f"cuda:{torch.cuda.current_device()}")
         if isinstance(self.accelerator, CPUAccelerator):
             return torch.device("cpu")
         raise MisconfigurationException(
-            f"Was unable to infer device type from the accelerator: {self.accelerator.__class__.__name__}."
+            f"Was unable to infer device type from the accelerator: {self.accelerator.__class__}."
         )
 
     @property
@@ -249,7 +267,7 @@ class HivemindStrategy(Strategy):
                 " as this would delete the gradients before they are averaged."
             )
         assert lightning_module is not None
-        lightning_module.optimizer_zero_grad = None  # type: ignore[assignment]
+        lightning_module.optimizer_zero_grad = None
 
     def _wrap_schedulers(self, opt: "hivemind.Optimizer") -> None:
         # wrap schedulers so that they only update when the hivemind optimizer updates
@@ -297,7 +315,7 @@ class HivemindStrategy(Strategy):
     def teardown(self) -> None:
         if self._optimizer_zero_grad_original is not None and self.lightning_module is not None:
             # re-enable `optimizer_zero_grad`
-            self.lightning_module.optimizer_zero_grad = self._optimizer_zero_grad_original  # type: ignore[assignment]
+            self.lightning_module.optimizer_zero_grad = self._optimizer_zero_grad_original
 
         if self._opt:
             self._opt.shutdown()
