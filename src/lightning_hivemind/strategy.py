@@ -22,13 +22,25 @@ import hivemind
 import torch
 from lightning_fabric.strategies.strategy import TBroadcast
 from lightning_fabric.utilities.types import LRScheduler, ReduceLROnPlateau
-from pytorch_lightning import Trainer
-from pytorch_lightning.strategies import Strategy
-from pytorch_lightning.utilities.data import extract_batch_size
-from pytorch_lightning.utilities.exceptions import MisconfigurationException
-from pytorch_lightning.utilities.model_helpers import is_overridden
-from pytorch_lightning.utilities.rank_zero import rank_zero_warn
+from lightning_utilities import module_available
 from torch import Tensor
+
+if module_available("lightning"):
+    from lightning.pytorch import Trainer
+    from lightning.pytorch.strategies import Strategy
+    from lightning.pytorch.utilities.data import extract_batch_size
+    from lightning.pytorch.utilities.exceptions import MisconfigurationException
+    from lightning.pytorch.utilities.model_helpers import is_overridden
+    from lightning.pytorch.utilities.rank_zero import rank_zero_warn
+elif module_available("pytorch_lightning"):
+    from pytorch_lightning import Trainer
+    from pytorch_lightning.strategies import Strategy
+    from pytorch_lightning.utilities.data import extract_batch_size
+    from pytorch_lightning.utilities.exceptions import MisconfigurationException
+    from pytorch_lightning.utilities.model_helpers import is_overridden
+    from pytorch_lightning.utilities.rank_zero import rank_zero_warn
+else:
+    raise ModuleNotFoundError("You are missing `lightning` or `pytorch-lightning` package, please install it.")
 
 log = logging.getLogger(__name__)
 
