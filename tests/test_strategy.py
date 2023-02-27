@@ -116,6 +116,7 @@ def test_raise_exception_multiple_optimizers():
         trainer.fit(model)
 
 
+@mock.patch("lightning.pytorch.utilities.data._extract_batch_size", autospec=True, return_value=[None])
 @mock.patch("pytorch_lightning.utilities.data._extract_batch_size", autospec=True, return_value=[None])
 def test_raise_exception_no_batch_size(mock_extract_batch_size):
     """Test that we raise an exception when no batch size is automatically found."""
