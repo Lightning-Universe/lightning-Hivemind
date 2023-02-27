@@ -17,12 +17,14 @@ if module_available("lightning"):
     from lightning.pytorch.demos.boring_classes import BoringModel
     from lightning.pytorch.utilities.exceptions import MisconfigurationException
     from lightning.pytorch.utilities.types import STEP_OUTPUT
+
     PL_PACKAGE = "lightning.pytorch"
 elif module_available("pytorch_lightning"):
     from pytorch_lightning import Trainer
     from pytorch_lightning.demos.boring_classes import BoringModel
     from pytorch_lightning.utilities.exceptions import MisconfigurationException
     from pytorch_lightning.utilities.types import STEP_OUTPUT
+
     PL_PACKAGE = "pytorch_lightning"
 else:
     raise ModuleNotFoundError("You are missing `lightning` or `pytorch-lightning` package, please install it.")
@@ -102,6 +104,9 @@ def test_reuse_grad_buffers_warning():
         trainer.fit(model)
 
 
+@pytest.mark.xfail(
+    raises=AssertionError, reason="Training with multiple optimizers is only supported with manual optimization"
+)
 def test_raise_exception_multiple_optimizers():
     """Test that we raise an exception when multiple optimizers are provided."""
 
