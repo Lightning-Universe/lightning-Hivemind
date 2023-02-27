@@ -118,7 +118,7 @@ def test_raise_exception_multiple_optimizers():
 
 @mock.patch("lightning.pytorch.utilities.data._extract_batch_size", autospec=True, return_value=[None])
 @mock.patch("pytorch_lightning.utilities.data._extract_batch_size", autospec=True, return_value=[None])
-def test_raise_exception_no_batch_size(mock_extract_batch_size):
+def test_raise_exception_no_batch_size(mock_extract_bs_lai, mock_extract_bs_pl):
     """Test that we raise an exception when no batch size is automatically found."""
     model = BoringModel()
     trainer = Trainer(strategy=HivemindStrategy(target_batch_size=1), fast_dev_run=True)

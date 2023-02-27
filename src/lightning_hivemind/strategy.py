@@ -26,20 +26,20 @@ from torch.optim import Optimizer
 
 if module_available("lightning"):
     from lightning.fabric.strategies.strategy import TBroadcast
-    from lightning.fabric.utilities.exceptions import MisconfigurationException
     from lightning.fabric.utilities.types import LRScheduler, ReduceLROnPlateau
     from lightning.pytorch import Trainer
     from lightning.pytorch.strategies import Strategy
     from lightning.pytorch.utilities.data import extract_batch_size
+    from lightning.pytorch.utilities.exceptions import MisconfigurationException
     from lightning.pytorch.utilities.model_helpers import is_overridden
     from lightning.pytorch.utilities.rank_zero import rank_zero_warn
 elif module_available("pytorch_lightning") and module_available("lightning_fabric"):
     from lightning_fabric.strategies.strategy import TBroadcast
-    from lightning_fabric.utilities.exceptions import MisconfigurationException
     from lightning_fabric.utilities.types import LRScheduler, ReduceLROnPlateau
     from pytorch_lightning import Trainer
     from pytorch_lightning.strategies import Strategy
     from pytorch_lightning.utilities.data import extract_batch_size
+    from pytorch_lightning.utilities.exceptions import MisconfigurationException
     from pytorch_lightning.utilities.model_helpers import is_overridden
     from pytorch_lightning.utilities.rank_zero import rank_zero_warn
 else:
