@@ -194,16 +194,16 @@ class HivemindStrategy(Strategy):
     @property
     def root_device(self) -> torch.device:
         if module_available("lightning"):
-            from lightning.fabric.accelerators import CPUAccelerator, CUDAAccelerator
+            from lightning.pytorch.accelerators import CPUAccelerator, CUDAAccelerator
         else:
-            from lightning_fabric.accelerators import CPUAccelerator, CUDAAccelerator
+            from pytorch_lightning.accelerators import CPUAccelerator, CUDAAccelerator
 
         if isinstance(self.accelerator, CUDAAccelerator):
             return torch.device(f"cuda:{torch.cuda.current_device()}")
         if isinstance(self.accelerator, CPUAccelerator):
             return torch.device("cpu")
         raise MisconfigurationException(
-            f"Was unable to infer device type from the accelerator: {self.accelerator.__class__.__name__}."
+            f"Was unable to infer device type from the accelerator: {self.accelerator.__class__}."
         )
 
     @property
