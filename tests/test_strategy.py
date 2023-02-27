@@ -13,14 +13,14 @@ from torch import Tensor
 from torch.optim import Optimizer
 
 if module_available("lightning"):
-    from lightning.fabric.utilities.exceptions import MisconfigurationException
     from lightning.pytorch import Trainer
     from lightning.pytorch.demos.boring_classes import BoringModel
+    from lightning.pytorch.utilities.exceptions import MisconfigurationException
     from lightning.pytorch.utilities.types import STEP_OUTPUT
-elif module_available("pytorch_lightning") and module_available("lightning_fabric"):
-    from lightning_fabric.utilities.exceptions import MisconfigurationException
+elif module_available("pytorch_lightning"):
     from pytorch_lightning import Trainer
     from pytorch_lightning.demos.boring_classes import BoringModel
+    from pytorch_lightning.utilities.exceptions import MisconfigurationException
     from pytorch_lightning.utilities.types import STEP_OUTPUT
 else:
     raise ModuleNotFoundError("You are missing `lightning` or `pytorch-lightning` package, please install it.")
