@@ -193,8 +193,10 @@ class HivemindStrategy(Strategy):
 
     @property
     def root_device(self) -> torch.device:
-        from pytorch_lightning.accelerators.cpu import CPUAccelerator
-        from pytorch_lightning.accelerators.cuda import CUDAAccelerator
+        if module_available("lightning"):
+            from lightning.fabric.accelerators import CPUAccelerator, CUDAAccelerator
+        else:
+            from lightning_fabric.accelerators import CPUAccelerator, CUDAAccelerator
 
         if isinstance(self.accelerator, CUDAAccelerator):
             return torch.device(f"cuda:{torch.cuda.current_device()}")
