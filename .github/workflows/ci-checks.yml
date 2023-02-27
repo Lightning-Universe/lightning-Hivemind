@@ -30,7 +30,7 @@ jobs:
       testing-matrix: |
         {
           "os": ["ubuntu-latest", "macos-latest"],
-          "python-version": ["3.9]
+          "python-version": ["3.9"]
         }
 
 #  check-docs:

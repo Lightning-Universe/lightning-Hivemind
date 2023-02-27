@@ -105,7 +105,7 @@ def test_reuse_grad_buffers_warning():
 
 
 @pytest.mark.xfail(
-    raises=AssertionError, reason="Training with multiple optimizers is only supported with manual optimization"
+    raises=RuntimeError, reason="Training with multiple optimizers is only supported with manual optimization"
 )
 def test_raise_exception_multiple_optimizers():
     """Test that we raise an exception when multiple optimizers are provided."""
