@@ -42,9 +42,3 @@ python train.py
 ```
 
 A helper message is printed once your training begins, which shows you how to start training on other machines using the same code.
-
-## Tests / Docs notes
-
-- We are using [Napoleon style,](https://www.sphinx-doc.org/en/master/usage/extensions/napoleon.html) and we shall use static types...
-- It is nice to se [doctest](https://docs.python.org/3/library/doctest.html) as they are also generated as examples in documentation
-- For wider and edge cases testing use [pytest parametrization](https://docs.pytest.org/en/stable/parametrize.html) :\]
