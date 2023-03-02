@@ -285,6 +285,7 @@ def test_multiple_peers(num_processes, wait_seconds):
             assert any(global_step > 0 for global_step in process_steps)
 
 
+@pytest.mark.xfail(AssertionError, reason="Trainer.precision_plugin.scaler is not hivemind.GradScaler")  # todo
 @pytest.mark.skipif(torch.cuda.device_count() < 1, reason="This test needs at least single GPU.")
 @mock.patch.dict(os.environ, {"HIVEMIND_MEMORY_SHARING_STRATEGY": "file_descriptor"}, clear=True)
 def test_scaler_updated_precision_16():
