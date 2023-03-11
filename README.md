@@ -1,8 +1,13 @@
 # Lightning extension: Hivemind
 
-[![CI testing](https://github.com/Lightning-AI/lightning-Hivemind/actions/workflows/ci-testing.yml/badge.svg?event=push)](https://github.com/Lightning-AI/lightning-Hivemind/actions/workflows/ci-testing.yml)
-[![General checks](https://github.com/Lightning-AI/lightning-Hivemind/actions/workflows/ci-checks.yml/badge.svg?event=push)](https://github.com/Lightning-AI/lightning-Hivemind/actions/workflows/ci-checks.yml)
-[![Documentation Status](https://readthedocs.org/projects/lightning-Hivemind/badge/?version=latest)](https://lightning-Hivemind.readthedocs.io/en/latest/?badge=latest)
+[![PyPI Status](https://badge.fury.io/py/lightning-hivemind.svg)](https://badge.fury.io/py/lightning-hivemind)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/lightning-hivemind)](https://pypi.org/project/lightning-hivemind/)
+[![PyPI Status](https://pepy.tech/badge/lightning-hivemind)](https://pepy.tech/project/lightning-hivemind)
+[![Deploy Docs](https://github.com/Lightning-AI/lightning-Hivemind/actions/workflows/docs-deploy.yml/badge.svg)](https://lightning-ai.github.io/lightning-Hivemind/)
+
+[![General checks](https://github.com/Lightning-AI/lightning-hivemind/actions/workflows/ci-checks.yml/badge.svg?event=push)](https://github.com/Lightning-AI/lightning-hivemind/actions/workflows/ci-checks.yml)
+[![CI testing](https://github.com/Lightning-AI/lightning-hivemind/actions/workflows/ci-testing.yml/badge.svg?event=push)](https://github.com/Lightning-AI/lightning-hivemind/actions/workflows/ci-testing.yml)
+[![Build Status](https://dev.azure.com/Lightning-AI/compatibility/_apis/build/status/Lightning-AI.lightning-Horovod?branchName=main)](https://dev.azure.com/Lightning-AI/compatibility/_build/latest?definitionId=44&branchName=main)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/Lightning-AI/lightning-Hivemind/main.svg)](https://results.pre-commit.ci/latest/github/Lightning-AI/lightning-Hivemind/main)
 
 Collaborative Training tries to solve the need for top-tier multi-GPU servers by allowing you to train across unreliable machines,
