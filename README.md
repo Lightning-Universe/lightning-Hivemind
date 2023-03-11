@@ -1,5 +1,6 @@
 # Lightning extension: Hivemind
 
+[![lightning](https://img.shields.io/badge/-Lightning_2.0+-792ee5?logo=pytorchlightning&logoColor=white)](https://lightning.ai/)
 [![PyPI Status](https://badge.fury.io/py/lightning-hivemind.svg)](https://badge.fury.io/py/lightning-hivemind)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/lightning-hivemind)](https://pypi.org/project/lightning-hivemind/)
 [![PyPI Status](https://pepy.tech/badge/lightning-hivemind)](https://pepy.tech/project/lightning-hivemind)
@@ -7,7 +8,7 @@
 
 [![General checks](https://github.com/Lightning-AI/lightning-hivemind/actions/workflows/ci-checks.yml/badge.svg?event=push)](https://github.com/Lightning-AI/lightning-hivemind/actions/workflows/ci-checks.yml)
 [![CI testing](https://github.com/Lightning-AI/lightning-hivemind/actions/workflows/ci-testing.yml/badge.svg?event=push)](https://github.com/Lightning-AI/lightning-hivemind/actions/workflows/ci-testing.yml)
-[![Build Status](https://dev.azure.com/Lightning-AI/compatibility/_apis/build/status/Lightning-AI.lightning-Horovod?branchName=main)](https://dev.azure.com/Lightning-AI/compatibility/_build/latest?definitionId=44&branchName=main)
+[![Build Status](https://dev.azure.com/Lightning-AI/compatibility/_apis/build/status/Lightning-AI.lightning-Hivemind?branchName=main)](https://dev.azure.com/Lightning-AI/compatibility/_build/latest?definitionId=43&branchName=main)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/Lightning-AI/lightning-Hivemind/main.svg)](https://results.pre-commit.ci/latest/github/Lightning-AI/lightning-Hivemind/main)
 
 Collaborative Training tries to solve the need for top-tier multi-GPU servers by allowing you to train across unreliable machines,
