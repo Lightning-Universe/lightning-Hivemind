@@ -1,4 +1,4 @@
-# Lightning extension: Hivemind
+# Lightning ⚡ Hivemind
 
 [![lightning](https://img.shields.io/badge/-Lightning_2.0+-792ee5?logo=pytorchlightning&logoColor=white)](https://lightning.ai/)
 [![PyPI Status](https://badge.fury.io/py/lightning-hivemind.svg)](https://badge.fury.io/py/lightning-hivemind)
@@ -19,9 +19,7 @@ Under the hood, we use [Hivemind](https://github.com/learning-at-home/hivemind) 
 To use Collaborative Training, you need to first this extension.
 
 ```bash
-git clone https://github.com/Lightning-AI/lightning-Hivemind.git
-cd lightning-Hivemind
-pip install .
+pip install -U lightning-Hivemind
 ```
 
 The `HivemindStrategy` accumulates gradients from all processes that are collaborating until they reach a `target_batch_size`. By default, we use the batch size
@@ -31,7 +29,7 @@ is made on all processes.
 When using `HivemindStrategy` note that you cannot use gradient accumulation (`accumulate_grad_batches`). This is because Hivemind manages accumulation internally.
 
 ```py
-from pytorch_lightning import Trainer
+from lightning import Trainer
 from lightning_hivemind.strategy import HivemindStrategy
 
 trainer = Trainer(strategy=HivemindStrategy(target_batch_size=8192), accelerator="gpu", devices=1)
