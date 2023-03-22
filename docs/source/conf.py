@@ -20,6 +20,7 @@ import sys
 from importlib.util import module_from_spec, spec_from_file_location
 
 import pt_lightning_sphinx_theme
+import pypandoc
 
 _PATH_HERE = os.path.abspath(os.path.dirname(__file__))
 _PATH_ROOT = os.path.realpath(os.path.join(_PATH_HERE, "..", ".."))
@@ -73,18 +74,19 @@ def _transform_changelog(path_in: str, path_out: str) -> None:
 def _convert_markdown(path_in: str, path_out: str) -> None:
     with open(path_in) as fp:
         readme = fp.read()
-    # TODO: temp fix removing SVG badges and GIF, because PDF cannot show them
+    # TODO: temp fix removing SVG badges and GIF, because they are automatically 100% wide
     readme = re.sub(r"(\[!\[.*\))", "", readme)
     readme = re.sub(r"(!\[.*.gif\))", "", readme)
     folder_names = (os.path.basename(p) for p in glob.glob(os.path.join(_PATH_ROOT, "*")) if os.path.isdir(p))
     for dir_name in folder_names:
         readme = readme.replace("](%s/" % dir_name, "](%s/" % os.path.join(_PATH_ROOT, dir_name))
+    readme = pypandoc.convert_text(readme, format="markdown", to="rst")
     with open(path_out, "w") as fp:
         fp.write(readme)
 
 
 # export the READme
-_convert_markdown(os.path.join(_PATH_ROOT, "README.md"), "readme.md")
+_convert_markdown(os.path.join(_PATH_ROOT, "README.md"), "readme.rst")
 
 # -- General configuration ---------------------------------------------------
 
