@@ -9,10 +9,9 @@ updates:
     directory: "/"
     # Check for updates once a week
     schedule:
-      interval: "monthly"
+      interval: "weekly"
     # Labels on pull requests for version updates only
-    labels:
-      - "ci / tests"
+    labels: ["ci / tests"]
     pull-request-branch-name:
       # Separate sections of the branch name with a hyphen
       # for example, `dependabot-npm_and_yarn-next_js-acorn-6.4.1`
