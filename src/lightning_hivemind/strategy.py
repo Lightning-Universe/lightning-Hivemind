@@ -267,7 +267,7 @@ class HivemindStrategy(Strategy):
                 " as this would delete the gradients before they are averaged."
             )
         assert lightning_module is not None
-        lightning_module.optimizer_zero_grad = None  # type: ignore[method-assign]
+        lightning_module.optimizer_zero_grad = None  # type: ignore[method-assign,assignment]
 
     def _wrap_schedulers(self, opt: "hivemind.Optimizer") -> None:
         # wrap schedulers so that they only update when the hivemind optimizer updates
