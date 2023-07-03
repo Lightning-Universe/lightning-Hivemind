@@ -34,10 +34,10 @@ if module_available("lightning"):
     from lightning.pytorch.utilities.model_helpers import is_overridden
     from lightning.pytorch.utilities.rank_zero import rank_zero_warn
 elif module_available("pytorch_lightning") and module_available("lightning_fabric"):
-    from lightning_fabric.strategies.strategy import TBroadcast
-    from lightning_fabric.utilities.types import LRScheduler, ReduceLROnPlateau
-    from pytorch_lightning import Trainer
-    from pytorch_lightning.strategies import Strategy
+    from lightning_fabric.strategies.strategy import TBroadcast  # type: ignore[no-redef]
+    from lightning_fabric.utilities.types import LRScheduler, ReduceLROnPlateau  # type: ignore[no-redef]
+    from pytorch_lightning import Trainer  # type: ignore[assignment]
+    from pytorch_lightning.strategies import Strategy  # type: ignore[assignment]
     from pytorch_lightning.utilities.data import extract_batch_size
     from pytorch_lightning.utilities.exceptions import MisconfigurationException
     from pytorch_lightning.utilities.model_helpers import is_overridden
@@ -267,7 +267,7 @@ class HivemindStrategy(Strategy):
                 " as this would delete the gradients before they are averaged."
             )
         assert lightning_module is not None
-        lightning_module.optimizer_zero_grad = None
+        lightning_module.optimizer_zero_grad = None  # type: ignore[method-assign,assignment]
 
     def _wrap_schedulers(self, opt: "hivemind.Optimizer") -> None:
         # wrap schedulers so that they only update when the hivemind optimizer updates
@@ -315,7 +315,9 @@ class HivemindStrategy(Strategy):
     def teardown(self) -> None:
         if self._optimizer_zero_grad_original is not None and self.lightning_module is not None:
             # re-enable `optimizer_zero_grad`
-            self.lightning_module.optimizer_zero_grad = self._optimizer_zero_grad_original
+            self.lightning_module.optimizer_zero_grad = (  # type: ignore[method-assign]
+                self._optimizer_zero_grad_original
+            )
 
         if self._opt:
             self._opt.shutdown()
