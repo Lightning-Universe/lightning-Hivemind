@@ -8,7 +8,7 @@
 
 [![General checks](https://github.com/Lightning-AI/lightning-hivemind/actions/workflows/ci-checks.yml/badge.svg?event=push)](https://github.com/Lightning-AI/lightning-hivemind/actions/workflows/ci-checks.yml)
 [![CI testing](https://github.com/Lightning-AI/lightning-hivemind/actions/workflows/ci-testing.yml/badge.svg?event=push)](https://github.com/Lightning-AI/lightning-hivemind/actions/workflows/ci-testing.yml)
-[![Build Status](https://dev.azure.com/Lightning-AI/compatibility/_apis/build/status/Lightning-AI.lightning-Hivemind?branchName=main)](https://dev.azure.com/Lightning-AI/compatibility/_build/latest?definitionId=43&branchName=main)
+[![Build Status](https://dev.azure.com/Lightning-AI/compatibility/_apis/build/status%2Fstrategies%2FLightning-Universe.lit-strategy-Hivemind?branchName=main)](https://dev.azure.com/Lightning-AI/compatibility/_build/latest?definitionId=62&branchName=main)
 [![pre-commit status](https://results.pre-commit.ci/badge/github/Lightning-AI/lightning-Hivemind/main.svg)](https://results.pre-commit.ci/latest/github/Lightning-AI/lightning-Hivemind/main)
 
 Collaborative Training tries to solve the need for top-tier multi-GPU servers by allowing you to train across unreliable machines,
