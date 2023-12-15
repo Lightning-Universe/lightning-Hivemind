@@ -105,6 +105,9 @@ class HivemindStrategy(Strategy):
         initial_peers: If connecting to a running process, a list of initial peers needs to be passed in.
             This can also be set via the env variable ``INITIAL_PEERS``.
 
+        use_ipfs: Use IPFS to find initial_peers. If enabled, you only need to provide /p2p/XXXX part of the
+            multiaddrs for the initial_peers (no need to specify a particular IPv4/IPv6 host and port)"
+
         **optimizer_kwargs: kwargs are passed to the :class:`hivemind.Optimizer` class.
     """
 
@@ -128,6 +131,7 @@ class HivemindStrategy(Strategy):
         averager_opts: Optional[Dict] = None,
         host_maddrs: Optional[List] = None,
         initial_peers: Optional[Union[str, List]] = None,
+        use_ipfs: bool = False,
         **optimizer_kwargs: Any,
     ):
         if platform.system() != "Linux":
@@ -165,6 +169,8 @@ class HivemindStrategy(Strategy):
             start=True,
             initial_peers=initial_peers,
             host_maddrs=host_maddrs if host_maddrs is not None else ["/ip4/0.0.0.0/tcp/0", "/ip4/0.0.0.0/udp/0/quic"],
+            use_ipfs=use_ipfs,
+            ensure_bootstrap_success=True if not use_ipfs else False,
         )
 
         visible_addresses = [
