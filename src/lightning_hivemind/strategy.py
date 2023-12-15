@@ -170,7 +170,7 @@ class HivemindStrategy(Strategy):
             initial_peers=initial_peers,
             host_maddrs=host_maddrs if host_maddrs is not None else ["/ip4/0.0.0.0/tcp/0", "/ip4/0.0.0.0/udp/0/quic"],
             use_ipfs=use_ipfs,
-            ensure_bootstrap_success=True if not use_ipfs else False,
+            ensure_bootstrap_success=bool(not use_ipfs),
         )
 
         visible_addresses = [
