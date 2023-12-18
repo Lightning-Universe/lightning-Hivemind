@@ -113,6 +113,10 @@ class HivemindStrategy(Strategy):
 
         bootstrap_timeout: after one of peers responds, await other peers for at most this many seconds
 
+        use_relay: disable circuit relay functionality in libp2p (see https://docs.libp2p.io/concepts/nat/circuit-relay/)
+
+        use_auto_relay: look for libp2p relays to become reachable if we are behind NAT/firewall
+
         **optimizer_kwargs: kwargs are passed to the :class:`hivemind.Optimizer` class.
     """
 
@@ -139,6 +143,8 @@ class HivemindStrategy(Strategy):
         use_ipfs: bool = False,
         wait_timeout: int = 3,
         bootstrap_timeout: Optional[float] = None,
+        use_relay: bool = True,
+        use_auto_relay: bool = False,
         **optimizer_kwargs: Any,
     ):
         if platform.system() != "Linux":
@@ -177,9 +183,11 @@ class HivemindStrategy(Strategy):
             initial_peers=initial_peers,
             host_maddrs=host_maddrs if host_maddrs is not None else ["/ip4/0.0.0.0/tcp/0", "/ip4/0.0.0.0/udp/0/quic"],
             use_ipfs=use_ipfs,
+            ensure_bootstrap_success=bool(not use_ipfs),
             wait_timeout=wait_timeout,
             bootstrap_timeout=bootstrap_timeout,
-            ensure_bootstrap_success=bool(not use_ipfs),
+            use_relay=use_relay,
+            use_auto_relay=use_auto_relay
         )
 
         visible_addresses = [
