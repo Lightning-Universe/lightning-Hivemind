@@ -69,6 +69,7 @@ def test_scheduler_wrapped():
     )
     trainer.fit(model)
 
+
 @mock.patch.dict(os.environ, {"HIVEMIND_MEMORY_SHARING_STRATEGY": "file_descriptor"}, clear=True)
 def test_ipfs_integration():
     class TestModel(BoringModel):
@@ -82,15 +83,11 @@ def test_ipfs_integration():
 
     model = TestModel()
     trainer = Trainer(
-        strategy=HivemindStrategy(
-            target_batch_size=1, 
-            use_ipfs=True,
-            use_relay=True,
-            use_auto_relay=True
-        ),
+        strategy=HivemindStrategy(target_batch_size=1, use_ipfs=True, use_relay=True, use_auto_relay=True),
         fast_dev_run=True,
     )
     trainer.fit(model)
+
 
 @mock.patch.dict(
     os.environ,

@@ -187,7 +187,7 @@ class HivemindStrategy(Strategy):
             wait_timeout=wait_timeout,
             bootstrap_timeout=bootstrap_timeout,
             use_relay=use_relay,
-            use_auto_relay=use_auto_relay
+            use_auto_relay=use_auto_relay,
         )
 
         visible_addresses = [
