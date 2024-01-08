@@ -11,5 +11,5 @@
    :name: start
    :caption: Start here
 
-   strategy_advanced
-   strategy_expert
+   advanced
+   expert
