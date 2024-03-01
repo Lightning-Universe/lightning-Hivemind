@@ -149,7 +149,7 @@ class HivemindStrategy(Strategy):
         bootstrap_timeout: Optional[float] = None,
         use_relay: bool = True,
         use_auto_relay: bool = False,
-        identity_path: str = None,
+        identity_path: Optional[str] = None,
         **optimizer_kwargs: Any,
     ):
         if platform.system() != "Linux":
