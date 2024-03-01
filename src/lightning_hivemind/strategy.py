@@ -117,6 +117,10 @@ class HivemindStrategy(Strategy):
 
         use_auto_relay: look for libp2p relays to become reachable if we are behind NAT/firewall
 
+        identity_path: Path to a private key file. If defined, makes the peer ID deterministic.
+            If the file does not exist, writes a new private key to this file.
+    )
+
         **optimizer_kwargs: kwargs are passed to the :class:`hivemind.Optimizer` class.
     """
 
@@ -145,6 +149,7 @@ class HivemindStrategy(Strategy):
         bootstrap_timeout: Optional[float] = None,
         use_relay: bool = True,
         use_auto_relay: bool = False,
+        identity_path: str = None,
         **optimizer_kwargs: Any,
     ):
         if platform.system() != "Linux":
@@ -183,11 +188,12 @@ class HivemindStrategy(Strategy):
             initial_peers=initial_peers,
             host_maddrs=host_maddrs if host_maddrs is not None else ["/ip4/0.0.0.0/tcp/0", "/ip4/0.0.0.0/udp/0/quic"],
             use_ipfs=use_ipfs,
-            ensure_bootstrap_success=bool(not use_ipfs),
+            ensure_bootstrap_success=True,
             wait_timeout=wait_timeout,
             bootstrap_timeout=bootstrap_timeout,
             use_relay=use_relay,
             use_auto_relay=use_auto_relay,
+            identity_path=identity_path,
         )
 
         visible_addresses = [
