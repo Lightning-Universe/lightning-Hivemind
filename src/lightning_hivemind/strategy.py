@@ -277,7 +277,7 @@ class HivemindStrategy(Strategy):
                 raise ValueError(
                     f"The `ReduceLROnPlateau` scheduler is not currently supported with `{self.__class__.__name__}`."
                 )
-            scheduler_config.scheduler = HiveMindScheduler(optimizer=opt, scheduler=scheduler)
+            scheduler_config.scheduler = HiveMindScheduler(optimizer=opt, scheduler=scheduler)  # type: ignore[assignment]
 
     def on_train_batch_start(self, batch: Any, batch_idx: int, dataloader_idx: int = 0) -> None:
         if not self._hivemind_initialized:
