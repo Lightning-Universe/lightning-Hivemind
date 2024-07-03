@@ -105,6 +105,22 @@ class HivemindStrategy(Strategy):
         initial_peers: If connecting to a running process, a list of initial peers needs to be passed in.
             This can also be set via the env variable ``INITIAL_PEERS``.
 
+        use_ipfs: Use IPFS to find initial_peers. If enabled, you only need to provide /p2p/XXXX part of the
+            multiaddrs for the initial_peers (no need to specify a particular IPv4/IPv6 host and port)"
+
+        wait_timeout: a kademlia rpc request is deemed lost if we did not receive a reply in this many seconds,
+            useful if `use_ipfs=True`
+
+        bootstrap_timeout: after one of peers responds, await other peers for at most this many seconds
+
+        use_relay: disable circuit relay functionality in libp2p (see https://docs.libp2p.io/concepts/nat/circuit-relay/)
+
+        use_auto_relay: look for libp2p relays to become reachable if we are behind NAT/firewall
+
+        identity_path: Path to a private key file. If defined, makes the peer ID deterministic.
+            If the file does not exist, writes a new private key to this file.
+    )
+
         **optimizer_kwargs: kwargs are passed to the :class:`hivemind.Optimizer` class.
     """
 
@@ -128,6 +144,12 @@ class HivemindStrategy(Strategy):
         averager_opts: Optional[Dict] = None,
         host_maddrs: Optional[List] = None,
         initial_peers: Optional[Union[str, List]] = None,
+        use_ipfs: bool = False,
+        wait_timeout: int = 3,
+        bootstrap_timeout: Optional[float] = None,
+        use_relay: bool = True,
+        use_auto_relay: bool = False,
+        identity_path: Optional[str] = None,
         **optimizer_kwargs: Any,
     ):
         if platform.system() != "Linux":
@@ -165,6 +187,13 @@ class HivemindStrategy(Strategy):
             start=True,
             initial_peers=initial_peers,
             host_maddrs=host_maddrs if host_maddrs is not None else ["/ip4/0.0.0.0/tcp/0", "/ip4/0.0.0.0/udp/0/quic"],
+            use_ipfs=use_ipfs,
+            ensure_bootstrap_success=True,
+            wait_timeout=wait_timeout,
+            bootstrap_timeout=bootstrap_timeout,
+            use_relay=use_relay,
+            use_auto_relay=use_auto_relay,
+            identity_path=identity_path,
         )
 
         visible_addresses = [
