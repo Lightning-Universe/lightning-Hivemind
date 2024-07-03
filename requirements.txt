@@ -1,3 +1,5 @@
+numpy <2.0  # needed for older Torch
+torch <2.3  # fixme: freeze until AMP compatibility is resolved
 lightning >=2.0.0
 hivemind >=1.1.0, <=1.1.10.post2; sys_platform == 'linux'
 
