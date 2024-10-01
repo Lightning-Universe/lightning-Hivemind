@@ -12,20 +12,20 @@ concurrency:
 
 jobs:
   check-precommit:
-    uses: Lightning-AI/utilities/.github/workflows/check-precommit.yml@v0.11.6
+    uses: Lightning-AI/utilities/.github/workflows/check-precommit.yml@v0.11.7
 
   check-typing:
-    uses: Lightning-AI/utilities/.github/workflows/check-typing.yml@v0.11.6
+    uses: Lightning-AI/utilities/.github/workflows/check-typing.yml@v0.11.7
     with:
       actions-ref: v0.11.6
 
   check-schema:
-    uses: Lightning-AI/utilities/.github/workflows/check-schema.yml@v0.11.6
+    uses: Lightning-AI/utilities/.github/workflows/check-schema.yml@v0.11.7
     with:
       azure-dir: ".azure"
 
   check-package:
-    uses: Lightning-AI/utilities/.github/workflows/check-package.yml@v0.11.6
+    uses: Lightning-AI/utilities/.github/workflows/check-package.yml@v0.11.7
     with:
       actions-ref: v0.11.6
       import-name: "lightning_hivemind"
