@@ -265,7 +265,7 @@ def _run_collab_training_fn(initial_peers, wait_seconds, barrier, recorded_proce
 
 
 # TODO: check why it fails with PT 1.12
-@pytest.mark.skip()
+@pytest.mark.skip
 @mock.patch.dict(os.environ, {"HIVEMIND_MEMORY_SHARING_STRATEGY": "file_descriptor"}, clear=True)
 @pytest.mark.parametrize(
     ("num_processes", "wait_seconds"),
