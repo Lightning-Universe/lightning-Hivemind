@@ -38,3 +38,7 @@ updates:
     open-pull-requests-limit: 5
     reviewers:
       - "Lightning-Universe/engs"
+    groups:
+      GHA-updates:
+        patterns:
+          - "*"
