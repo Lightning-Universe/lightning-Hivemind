@@ -1,5 +1,5 @@
 numpy <2.0  # needed for older Torch
-torch
+torch <2.3 # fixme: freeze until AMP compatibility is resolved
 lightning >=2.0.0
-hivemind
 hivemind >=1.1.0; sys_platform == 'linux'
+pydantic >=2.0.0
