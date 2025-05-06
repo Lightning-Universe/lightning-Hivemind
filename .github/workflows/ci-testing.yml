@@ -19,9 +19,10 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]  # todo: , macOS-latest
-        python-version: [3.9]
+        python-version: ["3.10"]
         requires: ['oldest', 'latest']
-
+    env:
+      TORCH_URL: https://download.pytorch.org/whl/cpu/torch_stable.html
     # Timeout: https://stackoverflow.com/a/59076067/4521646
     timeout-minutes: 35
 
@@ -42,8 +43,8 @@ jobs:
 
     - name: Install package & dependencies
       run: |
-        pip --version
-        pip install -e . -U -q -r tests/requirements.txt --find-links https://download.pytorch.org/whl/cpu/torch_stable.html
+        set -e
+        pip install -e . -U -r tests/requirements.txt --find-links $TORCH_URL
         pip list
 
     - name: Tests
@@ -52,7 +53,6 @@ jobs:
       run: coverage run --source lightning_hivemind -m pytest src tests -v
 
     - name: Statistics
-      if: success()
       run: |
         coverage report
         coverage xml
@@ -61,7 +61,7 @@ jobs:
       uses: codecov/codecov-action@v5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        file: ./coverage.xml
+        files: ./coverage.xml
         flags: unittests
         env_vars: OS,PYTHON
         name: codecov-umbrella
