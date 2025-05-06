@@ -28,6 +28,7 @@ if module_available("lightning"):
     from lightning.fabric.strategies.strategy import TBroadcast
     from lightning.fabric.utilities.types import LRScheduler, ReduceLROnPlateau
     from lightning.pytorch import Trainer
+    from lightning.pytorch.accelerators import CPUAccelerator, CUDAAccelerator
     from lightning.pytorch.strategies import Strategy
     from lightning.pytorch.utilities.data import extract_batch_size
     from lightning.pytorch.utilities.exceptions import MisconfigurationException
@@ -35,11 +36,12 @@ if module_available("lightning"):
     from lightning.pytorch.utilities.rank_zero import rank_zero_warn
 elif module_available("pytorch_lightning") and module_available("lightning_fabric"):
     from lightning_fabric.strategies.strategy import TBroadcast  # type: ignore[no-redef]
-    from lightning_fabric.utilities.types import LRScheduler, ReduceLROnPlateau  # type: ignore[no-redef]
+    from lightning_fabric.utilities.types import LRScheduler, ReduceLROnPlateau
     from pytorch_lightning import Trainer  # type: ignore[assignment]
+    from pytorch_lightning.accelerators import CPUAccelerator, CUDAAccelerator  # type: ignore[assignment]
     from pytorch_lightning.strategies import Strategy  # type: ignore[assignment]
     from pytorch_lightning.utilities.data import extract_batch_size
-    from pytorch_lightning.utilities.exceptions import MisconfigurationException
+    from pytorch_lightning.utilities.exceptions import MisconfigurationException  # type: ignore[assignment]
     from pytorch_lightning.utilities.model_helpers import is_overridden
     from pytorch_lightning.utilities.rank_zero import rank_zero_warn
 else:
@@ -222,11 +224,6 @@ class HivemindStrategy(Strategy):
 
     @property
     def root_device(self) -> torch.device:
-        if module_available("lightning"):
-            from lightning.pytorch.accelerators import CPUAccelerator, CUDAAccelerator
-        else:
-            from pytorch_lightning.accelerators import CPUAccelerator, CUDAAccelerator
-
         if isinstance(self.accelerator, CUDAAccelerator):
             return torch.device(f"cuda:{torch.cuda.current_device()}")
         if isinstance(self.accelerator, CPUAccelerator):
