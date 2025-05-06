@@ -44,7 +44,6 @@ jobs:
     - name: Install package & dependencies
       run: |
         set -e
-        pip --version
         pip install -e . -U -r tests/requirements.txt --find-links $TORCH_URL
         pip list
 
@@ -62,7 +61,7 @@ jobs:
       uses: codecov/codecov-action@v5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        file: ./coverage.xml
+        files: ./coverage.xml
         flags: unittests
         env_vars: OS,PYTHON
         name: codecov-umbrella
