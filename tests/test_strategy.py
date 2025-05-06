@@ -70,6 +70,25 @@ def test_scheduler_wrapped():
     trainer.fit(model)
 
 
+@mock.patch.dict(os.environ, {"HIVEMIND_MEMORY_SHARING_STRATEGY": "file_descriptor"}, clear=True)
+def test_ipfs_integration():
+    class TestModel(BoringModel):
+        def on_before_backward(self, loss: Tensor) -> None:
+            scheduler = self.trainer.lr_scheduler_configs[0].scheduler
+            assert isinstance(scheduler, HiveMindScheduler)
+
+        def configure_optimizers(self):
+            optimizer = torch.optim.SGD(self.layer.parameters(), lr=0.1)
+            return [optimizer], [torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.9)]
+
+    model = TestModel()
+    trainer = Trainer(
+        strategy=HivemindStrategy(target_batch_size=1, use_ipfs=True, use_relay=True, use_auto_relay=True),
+        fast_dev_run=True,
+    )
+    trainer.fit(model)
+
+
 @mock.patch.dict(
     os.environ,
     {
@@ -139,7 +158,7 @@ def test_raise_exception_no_batch_size(mock__extract_batch_size):
     [(True, True, True), (False, True, False)],
 )
 def test_warn_if_argument_passed(delay_grad_averaging, delay_state_averaging, delay_optimizer_step):
-    """Ensure that valid combination of HiveMind delay arguments warn if scheduler isn't passed in as a  function."""
+    """Ensure that valid combination of HiveMind delay arguments warn if scheduler isn't passed in as a function."""
     model = BoringModel()
     trainer = Trainer(
         strategy=HivemindStrategy(
@@ -246,7 +265,7 @@ def _run_collab_training_fn(initial_peers, wait_seconds, barrier, recorded_proce
 
 
 # TODO: check why it fails with PT 1.12
-@pytest.mark.skip()
+@pytest.mark.skip
 @mock.patch.dict(os.environ, {"HIVEMIND_MEMORY_SHARING_STRATEGY": "file_descriptor"}, clear=True)
 @pytest.mark.parametrize(
     ("num_processes", "wait_seconds"),
