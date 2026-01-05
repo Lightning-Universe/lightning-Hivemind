@@ -11,8 +11,8 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
     - name: Checkout 🛎️
-      uses: actions/checkout@v5
-      # If you're using actions/checkout@v5 you must set persist-credentials to false in most cases for the deployment to work correctly.
+      uses: actions/checkout@v6
+      # If you're using actions/checkout@v6 you must set persist-credentials to false in most cases for the deployment to work correctly.
       with:
         persist-credentials: false
     - uses: actions/setup-python@v6
@@ -22,7 +22,7 @@ jobs:
     # Note: This uses an internal pip API and may not always work
     # https://github.com/actions/cache/blob/master/examples.md#multiple-oss-in-a-workflow
     - name: Cache pip
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: ~/.cache/pip
         key: pip-${{ hashFiles('requirements.txt') }}
@@ -40,7 +40,7 @@ jobs:
       run: make html --jobs 2
 
     - name: Deploy 🚀
-      uses: JamesIves/github-pages-deploy-action@v4.7.3
+      uses: JamesIves/github-pages-deploy-action@v4.7.6
       if: ${{ github.event_name == 'push' }}
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
