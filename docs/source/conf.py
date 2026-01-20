@@ -1,3 +1,4 @@
+"""Docs configuration file."""
 #
 # Configuration file for the Sphinx documentation builder.
 #
@@ -79,7 +80,7 @@ def _convert_markdown(path_in: str, path_out: str) -> None:
     readme = re.sub(r"(!\[.*.gif\))", "", readme)
     folder_names = (os.path.basename(p) for p in glob.glob(os.path.join(_PATH_ROOT, "*")) if os.path.isdir(p))
     for dir_name in folder_names:
-        readme = readme.replace("](%s/" % dir_name, "](%s/" % os.path.join(_PATH_ROOT, dir_name))
+        readme = readme.replace(f"]({dir_name}/", f"]({os.path.join(_PATH_ROOT, dir_name)}/")
     readme = pypandoc.convert_text(readme, format="markdown", to="rst")
     with open(path_out, "w") as fp:
         fp.write(readme)
@@ -281,7 +282,7 @@ intersphinx_mapping = {
 todo_include_todos = True
 
 
-def setup(app):
+def setup(app):  # noqa: D103
     # this is for hiding doctest decoration,
     # see: http://z4r.github.io/python/2011/12/02/hides-the-prompts-and-output/
     app.add_js_file("copybutton.js")
@@ -325,7 +326,7 @@ autodoc_mock_imports = MOCK_PACKAGES
 
 # Resolve function
 # This function is used to populate the (source) links in the API
-def linkcode_resolve(domain, info):
+def linkcode_resolve(domain, info):  # noqa: D103
     def find_source():
         # try to find the file and line number, based on code from numpy:
         # https://github.com/numpy/numpy/blob/master/doc/source/conf.py#L286
@@ -348,7 +349,7 @@ def linkcode_resolve(domain, info):
     if domain != "py" or not info["module"]:
         return None
     try:
-        filename = "%s#L%d-L%d" % find_source()
+        filename = "%s#L%d-L%d" % find_source()  # noqa: UP031
     except Exception:
         filename = info["module"].replace(".", "/") + ".py"
     # import subprocess
