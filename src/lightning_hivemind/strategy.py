@@ -16,7 +16,7 @@ import ipaddress
 import logging
 import os
 import platform
-from typing import Any, Callable, Dict, List, Optional, Union
+from typing import Any, Callable, Optional, Union
 
 import hivemind
 import torch
@@ -127,7 +127,7 @@ class HivemindStrategy(Strategy):
     """
 
     INITIAL_PEERS_ENV: str = "PL_INITIAL_PEERS"
-    optimizers: List[Optimizer]
+    optimizers: list[Optimizer]
 
     def __init__(
         self,
@@ -143,9 +143,9 @@ class HivemindStrategy(Strategy):
         matchmaking_time: float = 5.0,
         averaging_timeout: float = 30.0,
         verbose: bool = False,
-        averager_opts: Optional[Dict] = None,
-        host_maddrs: Optional[List] = None,
-        initial_peers: Optional[Union[str, List]] = None,
+        averager_opts: Optional[dict] = None,
+        host_maddrs: Optional[list] = None,
+        initial_peers: Optional[Union[str, list]] = None,
         use_ipfs: bool = False,
         wait_timeout: int = 3,
         bootstrap_timeout: Optional[float] = None,
@@ -358,7 +358,7 @@ class HiveMindScheduler:
     This code ensures that we only step when the HiveMind optimizer reaches the global step.
     """
 
-    base_lrs: List[float]
+    base_lrs: list[float]
 
     def __init__(self, optimizer: "hivemind.Optimizer", scheduler: LRScheduler) -> None:
         # copy most of the `Scheduler` methods into this instance. `__del__` is skipped in case the scheduler has
@@ -374,8 +374,8 @@ class HiveMindScheduler:
             self.scheduler.step(epoch=epoch)
             self.current_step += 1
 
-    def load_state_dict(self, state_dict: Dict) -> None:
+    def load_state_dict(self, state_dict: dict) -> None:
         self.scheduler.load_state_dict(state_dict)
 
-    def state_dict(self) -> Dict:
+    def state_dict(self) -> dict:
         return self.scheduler.state_dict()

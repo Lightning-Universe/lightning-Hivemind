@@ -13,8 +13,6 @@ concurrency:
 jobs:
   check-precommit:
     uses: Lightning-AI/utilities/.github/workflows/check-precommit.yml@v0.15.2
-    with:
-      python-version: "3.9"
 
   check-typing:
     uses: Lightning-AI/utilities/.github/workflows/check-typing.yml@v0.15.2
